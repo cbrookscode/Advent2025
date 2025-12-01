@@ -6,14 +6,14 @@ import (
 )
 
 func main() {
-	num, err := countTimeHitZero(test1)
+	num, err := countTimePassZero(test1)
 	if err != nil {
 		fmt.Printf("%v\n", err)
 	}
 	fmt.Printf("final count: %v\n", num)
 }
 
-func countTimeHitZero(rotationList []string) (int, error) {
+func countTimePassZero(rotationList []string) (int, error) {
 	startPoint := 50
 	count := 0
 	for _, rotation := range rotationList {
