@@ -43,7 +43,7 @@ func countTimeHitZero(rotationList []string) (int, error) {
 func CalcPosition(current, change, count int, direction string) (newLocation int, newCount int) {
 	switch direction {
 	case "L":
-		if current-change <= -1 {
+		if current-change < 0 {
 			if current != 0 {
 				count++
 			}
@@ -53,7 +53,7 @@ func CalcPosition(current, change, count int, direction string) (newLocation int
 		}
 	case "R":
 		if current+change > 99 {
-			current = -1 + (change - (99 - current))
+			current = (change - (100 - current))
 			if current != 0 {
 				count++
 			}
