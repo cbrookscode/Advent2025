@@ -6,18 +6,21 @@ import (
 )
 
 func main() {
-	fmt.Printf("final count: %v\n", countTimeHitZero(test1))
+	num, err := countTimeHitZero(test1)
+	if err != nil {
+		fmt.Printf("%v\n", err)
+	}
+	fmt.Printf("final count: %v\n", num)
 }
 
-func countTimeHitZero(rotationList []string) int {
+func countTimeHitZero(rotationList []string) (int, error) {
 	startPoint := 50
 	count := 0
 	for _, rotation := range rotationList {
 		direction := rotation[0:1]
 		num, err := strconv.ParseInt(rotation[1:], 10, 32)
 		if err != nil {
-			fmt.Printf("error parsing int from rotation: %v\n", err)
-			return 0
+			return 0, err
 		}
 
 		constrainedNum := int(num) % 100
@@ -34,7 +37,7 @@ func countTimeHitZero(rotationList []string) int {
 
 		startPoint, count = CalcPosition(startPoint, constrainedNum, count, direction)
 	}
-	return count
+	return count, nil
 }
 
 func CalcPosition(current, change, count int, direction string) (newLocation int, newCount int) {
