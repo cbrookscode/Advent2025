@@ -14,52 +14,35 @@ func main() {
 }
 
 func countTimePassZero(rotationList []string) (int, error) {
-	startPoint := 50
+	pos := 50
 	count := 0
 	for _, rotation := range rotationList {
 		direction := rotation[0:1]
-		num, err := strconv.ParseInt(rotation[1:], 10, 32)
+		dist, err := strconv.ParseInt(rotation[1:], 10, 32)
 		if err != nil {
 			return 0, err
 		}
 
-		constrainedNum := int(num) % 100
-		count += int(num) / 100
-		if constrainedNum == 0 {
-			continue
+		count += int(dist) / 100
+		dist = dist % 100
+		old := pos
+
+		if direction == "L" {
+			pos -= int(dist)
+		} else {
+			pos += int(dist)
 		}
 
-		if startPoint == 0 {
+		if old != 0 && pos > 100 {
+			pos = pos % 100
 			count++
-			startPoint, _ = CalcPosition(startPoint, constrainedNum, count, direction)
-			continue
+		} else if old != 0 && pos < 0 {
+			pos = (pos % 100) * -1
+			count++
 		}
-
-		startPoint, count = CalcPosition(startPoint, constrainedNum, count, direction)
+		if pos == 0 {
+			count++
+		}
 	}
 	return count, nil
-}
-
-func CalcPosition(current, change, count int, direction string) (newLocation int, newCount int) {
-	switch direction {
-	case "L":
-		if current-change < 0 {
-			if current != 0 {
-				count++
-			}
-			current = 100 - (change - current)
-		} else {
-			current = current - change
-		}
-	case "R":
-		if current+change > 99 {
-			current = (change - (100 - current))
-			if current != 0 {
-				count++
-			}
-		} else {
-			current = current + change
-		}
-	}
-	return current, count
 }

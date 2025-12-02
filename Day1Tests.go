@@ -11,8 +11,8 @@ var test0 = []string{
 	"L99",
 	"R14",
 	"L82",
-	"R568",
-	"R501",
+	"R560",
+	"L530",
 }
 var test1 = []string{
 	"R34",
