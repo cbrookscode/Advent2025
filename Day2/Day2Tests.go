@@ -1,5 +1,8 @@
 package Day2
 
+var TestOwn = []string{
+	"2121212118-2121212124",
+}
 var TestMain = []string{
 	"132454-182049",
 	"42382932-42449104",
