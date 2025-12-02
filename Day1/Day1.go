@@ -1,17 +1,8 @@
-package main
+package Day1
 
 import (
-	"fmt"
 	"strconv"
 )
-
-func main() {
-	num, err := countTimePassZero(test1)
-	if err != nil {
-		fmt.Printf("%v\n", err)
-	}
-	fmt.Printf("final count: %v\n", num)
-}
 
 func countTimePassZero(rotationList []string) (int, error) {
 	pos := 50

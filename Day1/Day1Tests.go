@@ -1,4 +1,4 @@
-package main
+package Day1
 
 var test0 = []string{
 	"L68",
