@@ -1,7 +1,6 @@
 package Day2
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -15,75 +14,39 @@ func CalcInvalid(input []string) int {
 		start, _ := strconv.Atoi(splitNums[0])
 		end, _ := strconv.Atoi(splitNums[1])
 
-		// loop over number range and ignore non symetrical numbers. Make each number string, split along midpoint and compare each side.
 		for i := start; i <= end; i++ {
-			if i == 666666666 {
-				fmt.Println("devil")
+			// single digits are valid
+			if i < 11 {
+				continue
 			}
 			strNum := strconv.Itoa(i)
-			if len(strNum)%2 == 0 { // is symmetrical
-				mid := len(strNum) / 2
-				first := strNum[0:mid]
-				second := strNum[mid:]
-				if first == second {
-					total += i
-				} else {
-					splits := len(strNum) / 2
-					last := strNum[0:2]
-					for j := 2; j < len(strNum); j + 2 {
-						if strNum[j:j+1] != last {
-							symmetrical = false
-						}
-					}
-				}
-			} else if len(strNum)%3 == 0 {
-				splits := len(strNum) / 3
-				if splits > 3 {
-					fmt.Println("greater than 3")
-				}
-				symmetrical := true
-				last := strNum[0:splits]
-				if len(strNum) == 3 {
-					for j := 1; j < len(strNum); j++ {
-						if strNum[j:j+1] != last {
-							symmetrical = false
-						}
-					}
-					if symmetrical {
-						fmt.Println(i)
-						total += i
-						continue
-					}
-				} else {
-					for j := splits; j <= len(strNum)-splits; j += splits {
-						if strNum[j:j+splits] != last {
-							symmetrical = false
-						}
-					}
-					if symmetrical {
-						fmt.Println(i)
-						total += i
-					}
-					if !symmetrical {
-						symmetrical = true
-						last := strNum[0:3]
-						for j := 3; j <= len(strNum)-3; j += 3 {
-							if strNum[j:j+3] != last {
-								symmetrical = false
-							}
-						}
-						if symmetrical {
-							fmt.Println(i)
-							total += i
-						}
-					}
-				}
+			if isNumberInvalid(strNum) {
+				total += i
 			}
 		}
 	}
 	return total
 }
 
-// func CalcInvalidPartTwo() int {
-
-// }
+/* check applicable increments for a given string of numbers. List of numbers is len(s)/2 and result has no remainder when modulo'd against current value of i in loop
+ and then see if increment yields an invalid number */
+func isNumberInvalid(s string) bool {
+	n := len(s)
+	// Loop over potential viable increments
+	for i := 1; i <= n/2; i++ {
+		if n % i != 0 { // only keep those that have no remainder against current i value
+			continue
+		}
+		repeat := true
+		for j := i; j < n; j += i { // test to see if i value yields a repeated string across its full length
+			if s[j:j+i] != s[:i] {
+				repeat = false
+				break
+			}
+		}
+		if repeat {
+			return true
+		}
+	}
+	return false
+}

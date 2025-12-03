@@ -7,5 +7,5 @@ import (
 )
 
 func main() {
-	fmt.Println(Day2.CalcInvalid(Day2.TestOwn))
+	fmt.Println(Day2.CalcInvalid(Day2.TestMain))
 }
