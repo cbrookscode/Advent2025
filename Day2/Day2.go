@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// Part One Solution
+// Part Two Solution
 func CalcInvalid(input []string) int {
 	total := 0
 	for _, numberSet := range input {
