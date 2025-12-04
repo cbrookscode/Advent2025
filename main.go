@@ -33,5 +33,6 @@ func main() {
 
 		inputList = append(inputList, listofNums)
 	}
-	fmt.Println(Day3.BiggerNum(Day3.TestPart2))
+	fmt.Println(Day3.Dumbass(inputList))
+
 }
