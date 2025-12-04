@@ -4,13 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strconv"
 
-	"github.com/cbrookscode/Advent2025/Day3"
+	"github.com/cbrookscode/Advent2025/Day4"
 )
 
 func main() {
-	file, err := os.Open("Day3/Day3.txt")
+	file, err := os.Open("Day4/Day4.txt")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -18,21 +17,16 @@ func main() {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	inputList := [][]int{}
+	inputList := [][]string{}
 	for scanner.Scan() {
 		line := scanner.Text()
-		listofNums := []int{}
+		listofNums := []string{}
 		for _, char := range line {
-			num, err := strconv.Atoi(string(char))
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
-			listofNums = append(listofNums, num)
+			listofNums = append(listofNums, string(char))
 		}
 
 		inputList = append(inputList, listofNums)
 	}
-	fmt.Println(Day3.Dumbass(inputList))
+	fmt.Println(Day4.TotalClearedNodes(inputList))
 
 }
