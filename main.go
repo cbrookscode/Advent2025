@@ -4,14 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strconv"
-	"strings"
 
-	"github.com/cbrookscode/Advent2025/Day5"
+	"github.com/cbrookscode/Advent2025/Day6"
 )
 
 func main() {
-	file, err := os.Open("Day5/Day5.txt")
+	file, err := os.Open("Day6/Day6.txt")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -19,27 +17,13 @@ func main() {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	ranges := [][]int64{}
-	ingredientNums := []int64{}
+	input := map[int][]string{}
 	for scanner.Scan() {
-		line := strings.TrimSpace(scanner.Text())
-		if line == "" {
-			continue
-		}
-
-		if strings.Contains(line, "-") {
-			parts := strings.Split(line, "-")
-			num1, _ := strconv.ParseInt(parts[0], 10, 64)
-			num2, _ := strconv.ParseInt(parts[1], 10, 64)
-			ranges = append(ranges, []int64{num1, num2})
-
-		} else {
-			num, _ := strconv.ParseInt(line, 10, 64)
-			ingredientNums = append(ingredientNums, num)
+		line := scanner.Text()
+		for i, char := range line {
+			input[i] = append(input[i], string(char))
 		}
 	}
-	fmt.Println("=====================================")
-	minMaxlist := Day5.GirthMasterFormula(ranges)
-	fmt.Println(Day5.GetAllNumbersInProvidedRanges(minMaxlist))
-
+	total := Day6.CalcLineAndTotalUp(input)
+	fmt.Println(total)
 }
