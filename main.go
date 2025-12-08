@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/cbrookscode/Advent2025/Day7"
+	"github.com/cbrookscode/Advent2025/Day6"
 )
 
 func main() {
-	file, err := os.Open("Day7/Day7.txt")
+	file, err := os.Open("Day6/Day6.txt")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -17,29 +17,13 @@ func main() {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	input := [][]string{}
-
-	startfound := false
-	startlocation := 0
-
+	input := map[int][]string{}
 	for scanner.Scan() {
 		line := scanner.Text()
-		if !startfound {
-			for i, char := range line {
-				if string(char) == "S" {
-					startfound = true
-					startlocation = i
-				}
-			}
-		} else {
-			listtoAdd := []string{}
-			for _, char := range line {
-				listtoAdd = append(listtoAdd, string(char))
-			}
-			input = append(input, listtoAdd)
+		for i, char := range line {
+			input[i] = append(input[i], string(char))
 		}
 	}
-
-	total := Day7.CountNumOfAvailPaths(startlocation, input)
+	total := Day6.CalcLineAndTotalUp(input)
 	fmt.Println(total)
 }
