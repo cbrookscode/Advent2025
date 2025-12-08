@@ -33,6 +33,7 @@ func FindClosestNode(point Point, curr_best float64, best_node Point, kdNode *No
 		best = potBest
 		bestNode = potBestNode
 	}
+	// if distance on axis to splitting plane is less then "radius" best closest found so far, then the excess is bleeding over to other side and need to check it
 	if float64(math.Abs(point.Coord(kdNode.axis)-kdNode.loc.Coord(kdNode.axis))) < best {
 		otherpotBest, otherpotBestNode := FindClosestNode(point, best, bestNode, second)
 		if otherpotBest < best {

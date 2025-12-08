@@ -1,6 +1,8 @@
 package Day8
 
-import "sort"
+import (
+	"sort"
+)
 
 type Point struct {
 	X int
@@ -29,39 +31,21 @@ func (p *Point) Coord(i int) float64 {
 }
 
 func BuildKBTree(depth int, parent *Node, points []Point) *Node {
-	axis := depth % 2
+	axis := depth % 3
 
 	// base case to stop recusion
-	if len(points) == 1 {
-		return &Node{
-			loc:    points[0],
-			axis:   axis,
-			parent: parent,
-			left:   nil,
-			right:  nil,
-		}
-	} else if points == nil {
+	if len(points) == 0 {
 		return nil
 	}
 
-	if axis == 0 { // split along x
-		// sort list by x
-		sort.Slice(points, func(i, j int) bool { return points[i].X < points[j].X })
-	}
-
-	if axis == 1 { // split along y
-		// sort list by y
-		sort.Slice(points, func(i, j int) bool { return points[i].Y < points[j].Y })
-	}
-
-	if axis == 2 { // split along z
-		// sort list by z
-		sort.Slice(points, func(i, j int) bool { return points[i].Z < points[j].Z })
-	}
+	sort.Slice(points, func(i, j int) bool { return int(points[i].Coord(axis)) < int(points[j].Coord(axis)) })
 
 	mid := len(points) / 2
 	left := points[:mid]
-	right := points[mid+1:]
+	right := []Point{}
+	if mid+1 < len(points) {
+		right = points[mid+1:]
+	}
 
 	newNode := &Node{
 		parent: parent,
