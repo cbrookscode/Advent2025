@@ -1,45 +1,62 @@
 package Day8
 
-import "math"
+import "sort"
 
-func FindClosestNode(point Point, curr_best float64, best_node Point, kdNode *Node) (float64, Point) {
-	if kdNode == nil {
-		return curr_best, best_node
-	}
+type Pair struct {
+	dist float64
+	p1   string
+	p2   string
+}
 
-	best := curr_best
-	bestNode := best_node
-	dx := float64((kdNode.loc.X - point.X) * (kdNode.loc.X - point.X))
-	dy := float64((kdNode.loc.Y - point.Y) * (kdNode.loc.Y - point.Y))
-	dz := float64((kdNode.loc.Z - point.Z) * (kdNode.loc.Z - point.Z))
-	newDist := math.Sqrt(dx + dy + dz)
-	if newDist != 0 && newDist < curr_best {
-		best = newDist
-		bestNode = kdNode.loc
-	}
+func GetShortestDistances(points []Point, kdtree *Node) []Pair {
+	pairs := []Pair{}
 
-	first := &Node{}
-	second := &Node{}
-	if point.Coord(kdNode.axis) < kdNode.loc.Coord(kdNode.axis) {
-		first = kdNode.left
-		second = kdNode.right
-	} else {
-		first = kdNode.right
-		second = kdNode.left
-	}
-
-	potBest, potBestNode := FindClosestNode(point, best, bestNode, first)
-	if potBest < best {
-		best = potBest
-		bestNode = potBestNode
-	}
-	// if distance on axis to splitting plane is less then "radius" best closest found so far, then the excess is bleeding over to other side and need to check it
-	if float64(math.Abs(point.Coord(kdNode.axis)-kdNode.loc.Coord(kdNode.axis))) < best {
-		otherpotBest, otherpotBestNode := FindClosestNode(point, best, bestNode, second)
-		if otherpotBest < best {
-			best = otherpotBest
-			bestNode = otherpotBestNode
+	for _, point := range points {
+		dist, closest := FindClosestNode(point, 90000000000000000, Point{}, kdtree)
+		p1 := point.Stringify()
+		p2 := closest.Stringify()
+		pairExists := false
+		for _, pair := range pairs {
+			if (pair.p1 == p1 && pair.p2 == p2) || (pair.p1 == p2 && pair.p2 == p1) {
+				// already made this pair
+				pairExists = true
+			}
+		}
+		if !pairExists {
+			pairs = append(pairs, Pair{dist: dist, p1: p1, p2: p2})
 		}
 	}
-	return best, bestNode
+	sort.Slice(pairs, func(i, j int) bool { return pairs[i].dist < pairs[j].dist })
+	return pairs
+}
+
+func GetCircuits(orderedPairs []Pair) [][]string {
+	uf := BuildUnionFind()
+	for i, pair := range orderedPairs {
+		if i == 10 {
+			break
+		}
+		uf.Union(pair.p1, pair.p2)
+	}
+	return uf.Group()
+}
+
+func CircuitTotal(listOfCircuits [][]string) int {
+	first := 0
+	second := 0
+	third := 0
+	for _, cirList := range listOfCircuits {
+		cirTotal := len(cirList)
+		if cirTotal > first {
+			third = second
+			second = first
+			first = cirTotal
+		} else if cirTotal > second {
+			third = second
+			second = cirTotal
+		} else if cirTotal > third {
+			third = cirTotal
+		}
+	}
+	return first * second * third
 }
