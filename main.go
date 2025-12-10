@@ -31,13 +31,8 @@ func main() {
 		input = append(input, Day8.Point{X: x, Y: y, Z: z})
 	}
 
-	// kdtree := Day8.BuildKBTree(0, nil, input)
 	pairs, strmap := Day8.GetPairs(input)
-	circuits := Day8.GetCircuits(pairs)
-	fmt.Println(len(circuits))
-	first := strmap[circuits[0][0]][0]
-	sec := strmap[circuits[0][len(circuits[0])-1]][0]
-	fmt.Println(first * sec)
-
-	// no need for kd tree impelementation. need distance values for all possible point combinations and then sort that list and feed into union find for solution to part 1.
+	_, nums := Day8.GetCircuits(pairs, strmap)
+	fmt.Println(nums)
+	fmt.Println(nums[0] * nums[1])
 }

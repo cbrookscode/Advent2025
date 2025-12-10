@@ -25,13 +25,13 @@ func (u *UnionFind) Find(x string) (parent string) {
 	return u.parent[x]
 }
 
-func (u *UnionFind) Union(x, y string) {
+func (u *UnionFind) Union(x, y string) (success bool) {
 	// need the parents of each, merge at roots, type of merge is dependent on rank
 	rootX := u.Find(x)
 	rootY := u.Find(y)
 
 	if rootX == rootY { // already in a group together
-		return
+		return false
 	}
 
 	if u.rank[rootX] < u.rank[rootY] {
@@ -42,6 +42,7 @@ func (u *UnionFind) Union(x, y string) {
 		u.parent[rootX] = rootY
 		u.rank[rootY]++
 	}
+	return true
 }
 
 func (u *UnionFind) Group() [][]string {

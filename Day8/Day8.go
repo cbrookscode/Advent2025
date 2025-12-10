@@ -51,12 +51,23 @@ func GetShortestDistances(points []Point, kdtree *Node) []Pair {
 	return pairs
 }
 
-func GetCircuits(orderedPairs []Pair) [][]string {
+func GetCircuits(orderedPairs []Pair, strmap map[string][]int) ([][]string, []int) {
 	uf := BuildUnionFind()
+	last1 := ""
+	last2 := ""
 	for _, pair := range orderedPairs {
-		uf.Union(pair.p1, pair.p2)
+		success := uf.Union(pair.p1, pair.p2)
+		if success {
+			last1 = pair.p1
+			last2 = pair.p2
+		}
+
 	}
-	return uf.Group()
+
+	l1 := strmap[last1][0]
+	l2 := strmap[last2][0]
+
+	return uf.Group(), []int{l1, l2}
 }
 
 func CircuitTotal(listOfCircuits [][]string) int {
