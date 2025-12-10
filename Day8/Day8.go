@@ -1,7 +1,6 @@
 package Day8
 
 import (
-	"fmt"
 	"math"
 	"sort"
 )
@@ -12,8 +11,9 @@ type Pair struct {
 	p2   string
 }
 
-func GetPairs(points []Point) []Pair {
+func GetPairs(points []Point) ([]Pair, map[string][]int) {
 	listofpairs := []Pair{}
+	stringMap := map[string][]int{}
 	for i := 0; i < len(points); i++ {
 		for j := i + 1; j < len(points); j++ {
 			dx := float64((points[i].X - points[j].X) * (points[i].X - points[j].X))
@@ -21,10 +21,12 @@ func GetPairs(points []Point) []Pair {
 			dz := float64((points[i].Z - points[j].Z) * (points[i].Z - points[j].Z))
 			newDist := math.Sqrt(dx + dy + dz)
 			listofpairs = append(listofpairs, Pair{dist: newDist, p1: points[i].Stringify(), p2: points[j].Stringify()})
+			stringMap[points[i].Stringify()] = []int{points[i].X, points[i].Y, points[i].Z}
+			stringMap[points[j].Stringify()] = []int{points[j].X, points[j].Y, points[j].Z}
 		}
 	}
 	sort.Slice(listofpairs, func(i, j int) bool { return listofpairs[i].dist < listofpairs[j].dist })
-	return listofpairs
+	return listofpairs, stringMap
 }
 
 func GetShortestDistances(points []Point, kdtree *Node) []Pair {
@@ -51,13 +53,8 @@ func GetShortestDistances(points []Point, kdtree *Node) []Pair {
 
 func GetCircuits(orderedPairs []Pair) [][]string {
 	uf := BuildUnionFind()
-	for i, pair := range orderedPairs {
-		if i == 1000 {
-			break
-		}
-		fmt.Printf("p1 = %v\n p2 = %v\n", pair.p1, pair.p2)
+	for _, pair := range orderedPairs {
 		uf.Union(pair.p1, pair.p2)
-		fmt.Println(uf.Group())
 	}
 	return uf.Group()
 }
