@@ -1,11 +1,30 @@
 package Day8
 
-import "sort"
+import (
+	"fmt"
+	"math"
+	"sort"
+)
 
 type Pair struct {
 	dist float64
 	p1   string
 	p2   string
+}
+
+func GetPairs(points []Point) []Pair {
+	listofpairs := []Pair{}
+	for i := 0; i < len(points); i++ {
+		for j := i + 1; j < len(points); j++ {
+			dx := float64((points[i].X - points[j].X) * (points[i].X - points[j].X))
+			dy := float64((points[i].Y - points[j].Y) * (points[i].Y - points[j].Y))
+			dz := float64((points[i].Z - points[j].Z) * (points[i].Z - points[j].Z))
+			newDist := math.Sqrt(dx + dy + dz)
+			listofpairs = append(listofpairs, Pair{dist: newDist, p1: points[i].Stringify(), p2: points[j].Stringify()})
+		}
+	}
+	sort.Slice(listofpairs, func(i, j int) bool { return listofpairs[i].dist < listofpairs[j].dist })
+	return listofpairs
 }
 
 func GetShortestDistances(points []Point, kdtree *Node) []Pair {
@@ -33,10 +52,12 @@ func GetShortestDistances(points []Point, kdtree *Node) []Pair {
 func GetCircuits(orderedPairs []Pair) [][]string {
 	uf := BuildUnionFind()
 	for i, pair := range orderedPairs {
-		if i == 10 {
+		if i == 1000 {
 			break
 		}
+		fmt.Printf("p1 = %v\n p2 = %v\n", pair.p1, pair.p2)
 		uf.Union(pair.p1, pair.p2)
+		fmt.Println(uf.Group())
 	}
 	return uf.Group()
 }
