@@ -7,32 +7,28 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/cbrookscode/Advent2025/Day8"
+	"github.com/cbrookscode/Advent2025/Day9"
 )
 
 func main() {
-	file, err := os.Open("Day8/Day8.txt")
+	file, err := os.Open("Day9/day9.txt")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	defer file.Close()
-	input := []Day8.Point{}
+	input := []Day9.Point{}
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
 		if line == "" {
 			continue
 		}
-		xyz := strings.Split(line, ",")
-		x, _ := strconv.Atoi(xyz[0])
-		y, _ := strconv.Atoi(xyz[1])
-		z, _ := strconv.Atoi(xyz[2])
-		input = append(input, Day8.Point{X: x, Y: y, Z: z})
+		nums := strings.Split(line, ",")
+		x, _ := strconv.Atoi(nums[0])
+		y, _ := strconv.Atoi(nums[1])
+		input = append(input, Day9.Point{X: x, Y: y})
 	}
-
-	pairs, strmap := Day8.GetPairs(input)
-	_, nums := Day8.GetCircuits(pairs, strmap)
-	fmt.Println(nums)
-	fmt.Println(nums[0] * nums[1])
+	area := Day9.GirMagic(input)
+	fmt.Println(area)
 }
